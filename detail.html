@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+        <title>Annex - Responsive Bootstrap 4 Admin Dashboard</title>
+        <meta content="Admin Dashboard" name="description" />
+        <meta content="Mannatthemes" name="author" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+        <link href="assets/plugins/morris/morris.css" rel="stylesheet">
+
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/icons.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/style.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/style.1.css" rel='stylesheet' type='text/css' /> 
+        <link href="assets/css/animate.css" rel="stylesheet" type="text/css" media="all"> 
+
+
+    </head>
+
+    <body onload="startHttpQuery();">
+
+        <!-- Loader -->
+        <div id="preloader"><div id="status"><div class="spinner"></div></div></div>
+
+        <!-- Navigation Bar-->
+        <header id="topnav">
+                <div class="topbar-main">
+                    <div class="container-fluid">
+                        <div class="logo">
+                            <!-- Text Logo -->
+                            <!-- <a href="index.html" class="logo">
+                            Annex
+                            </a> -->
+                            <!-- Image Logo -->
+                            <a href="index.html" class="logo">
+                                    <!-- <img src="assets/images/radar.png" alt="" height="22" class="logo-small"> -->
+                                    <img src="assets/images/radar.png" alt="" height="20" class="logo-large">
+                                    星云应用雷达
+                            </a>
+    
+                        </div>
+    
+                        <!-- <div class="col-md-4 offset-md-2 searchInput">
+                                <div class="input-group mt-2">
+                                    <input type="text" class="form-control" placeholder="输入账户地址，只看我的关注！">
+                                    <span class="input-group-append">
+                                        <button class="btn btn-primary" type="button">登录</button>
+                                    </span>
+                                </div>
+                        </div> -->
+    
+                        <div class="clearfix"></div>
+    
+                    </div> 
+                </div>
+                
+                <div class="navbar-custom">
+                    <div class="container-fluid">
+                        <div id="navigation">
+                           
+                            <ul class="navigation-menu">
+    
+                                <li class="has-submenu">
+                                    <a href="index.html"><i class="mdi mdi-bank"></i>主页</a>
+                                </li>
+    
+                                <li class="has-submenu">
+                                        <a href="#" data-toggle="modal" data-target="#myModal4"><i class="mdi mdi-basket-fill"></i>添加应用</a>
+                                </li>
+    
+                                <li class="has-submenu">
+                                        <a href="help.html"><i class="mdi mdi-book-open-page-variant"></i>使用教程</a>
+                                </li>
+    
+                                <li class="has-submenu">
+                                        <a href="#" data-toggle="modal" data-target="#myModal2"><i class="mdi mdi-email"></i>联系我们</a>
+                                </li>
+                            </ul>
+                        </div> 
+                    </div> 
+                </div> 
+            </header>
+        <!-- End Navigation Bar-->
+
+        <div class="wrapper">
+            <div class="container-fluid">
+
+                <!-- Page-Title -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-title-box", style="height:20px;" >
+                            <!-- <div class="btn-group pull-right">
+                                <ol class="breadcrumb hide-phone p-0 m-0">
+                                    <li class="breadcrumb-item"><a href="#">Annex</a></li>
+                                    <li class="breadcrumb-item active">Dashboard</li>
+                                </ol>
+                            </div>
+                            <h4 class="page-title">Dashboard</h4> -->
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title end breadcrumb -->
+                <div class="row">
+                    <!-- Column -->
+                    <!-- <div class="col-md-4 col-lg-4 col-xl-2">
+                        <div class="card m-b-30">
+                            <div class="card-body">
+                                <div class="d-flex flex-row">
+                                    <div class="col-12 align-self-center text-center">
+                                        <div class="m-l-10">
+                                            <h5 class="mt-0 round-inner">$18090</h5>
+                                            <p class="mb-0 text-muted">Visits Today</p>                                                                 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="col-md-4 col-lg-4 col-xl-3">
+                        <div class="card m-b-30">
+                            <div class="card-body">
+                                <div class="d-flex flex-row">
+                                    <div class="col-12 align-self-center text-center">
+                                        <div class="m-l-10" id="brife">
+                                            <h5 class="mt-0 round-inner" id="dappName">恐龙公园</h5>                                                           
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-xl-3">
+                        <div class="card m-b-30">
+                            <div class="card-body">
+                                <div class="d-flex flex-row" style="height:70px">
+                                    <div class="col-3 align-self-center">
+                                        <div class="round">
+                                            <i class="mdi mdi mdi-cash-usd"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-9 align-self-center text-center">
+                                        <div class="m-l-10" >
+                                            <h5 class="mt-0 round-inner" id="balance">0</h5>
+                                            <p class="mb-0 text-muted">合约余额(NAS)</p> 
+                                            <!-- <small class="text-muted">(单位：NAS)</small>                                                                   -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-xl-3">
+                        <div class="card m-b-30">
+                            <div class="card-body">
+                                <div class="d-flex flex-row" style="height:70px">
+                                    <div class="col-3 align-self-center">
+                                        <div class="round">
+                                                <i class="mdi mdi-cart"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-9 align-self-center text-center">
+                                        <div class="m-l-10" >
+                                            <h5 class="mt-0 round-inner" id="totalVolume">0</h5>
+                                            <p class="mb-0 text-muted">总调用量</p>  
+                                            <!-- <small class="text-muted">(合约所有调用量)</small>                                                                  -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 col-xl-3">
+                        <div class="card m-b-30">
+                            <div class="card-body">
+                                <div class="d-flex flex-row" style="height:70px">
+                                    <div class="col-3 align-self-center">
+                                        <div class="round">
+                                                <i class="mdi mdi-account-multiple-plus"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-9 align-self-center text-center">
+                                        <div class="m-l-10" >
+                                            <h5 class="mt-0 round-inner" id="totalUser">0</h5>
+                                            <p class="mb-0 text-muted  float-right">总用户量<small class="text-muted">(最近500次调用)</small></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-4 col-lg-4 col-xl-2">
+                        <div class="card m-b-30">
+                            <div class="card-body">
+                                <div class="d-flex flex-row">
+                                    <div class="col-12 align-self-center text-center">
+                                        <div class="m-l-10">
+                                            <h5 class="mt-0 round-inner">$18090</h5>
+                                            <p class="mb-0 text-muted">Visits Today</p>                                                                 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    
+                </div>
+                <div class="row">
+                    <!-- <div class="col-md-12 col-lg-12 col-xl-6">
+                        <div class="card m-b-30">
+                            <div class="card-body">
+                                    <h4 class="card-title font-20 mt-0">应用介绍</h4>
+                                    <p class="card-title font-15 mt-0">应用名称：恐龙家园</p>
+                                    <p class="card-text" style="height:200px;" >应用简介：</p>
+                                
+                            </div>
+                            <div class="card-body">
+                                <a href="#" class="btn btn-primary btn-block waves-effect waves-light">前往官网</a>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="col-md-12 col-lg-12 col-xl-5">
+                            <div class="card bg-white m-b-30">
+                                <div class="card-body new-user">
+                                    <h4 class="card-title font-20 mt-0" style="margin-left: 15px">
+                                        <button type="button" class="btn btn-success waves-effect waves-light">24H活跃用户</button>
+                                        <button type="button" class="btn btn-success waves-effect waves-light" id="dau">0</button>
+                                    </h4>
+                                    <ul class="list-unstyled mb-0 pr-3" id="boxscroll2" name="dailyUser" tabindex="1" style="overflow: hidden; outline: none;">
+                                    </ul>                                    
+                                </div>                                
+                            </div>
+                    </div>
+                    <div class="col-md-12 col-lg-12 col-xl-7">
+                        <div class="card bg-white m-b-30">
+                            <div class="card-body new-user">
+                                <h4 class="card-title font-20 mt-0" style="margin-left: 15px">
+                                    <button type="button" class="btn btn-success waves-effect waves-light">24H交易数据</button>
+                                    <button type="button" class="btn btn-success waves-effect waves-light" id="volume">0</button>
+                                </h4>
+                                    <ul class="list-unstyled mb-0 pr-3" id="boxscroll3" name="dailyVolume" tabindex="1" style="overflow: hidden; outline: none;">
+                                    </ul>                                    
+                            </div>                                
+                        </div>
+                    </div>               
+                </div>
+                    
+            </div>
+        </div>
+
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        © 2018 本网站由<a href="https://nebulas.io/cn/">星云链</a>提供区块链服务.
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- End Footer -->
+        <!-- End Footer -->
+        <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>						
+                        </div>
+                            <section>
+                                <div class="modal-body modal-spa">
+                                    <div class="writ", id="newWindow">
+                                        <h4>欢迎通过以下邮箱与我联系：</h4>
+                                        <h4>17780487248@163.com</h4>
+                                    </div>
+                                </div>
+                            </section>
+                    </div>
+                </div>
+        </div>
+        
+        <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>						
+                        </div>
+                            <section>
+                                <div class="modal-body modal-spa">
+                                    <div class="writ", id="newWindow">
+                                        <h4>请在浏览器插件中完成操作！</h4>
+                                    </div>
+                                </div>
+                            </section>
+                    </div>
+                </div>
+        </div>
+
+        <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>						
+                        </div>
+                            <section>
+                                <div class="modal-body modal-spa">
+                                    <div class="writ", id="newWindow1">
+                                        <h4>添加应用</h4>
+                                            <ul>
+                                                <li class="na-me">
+                                                    <input class="name" id="dappName" type="text" placeholder="请输入应用名称">
+                                                </li>
+                                                <li class="na-me">
+                                                    <input class="address" id="dappAddress" type="text" placeholder="请输入合约地址">
+                                                </li>
+                                                <li class="na-me">
+                                                    <input class="balance" id="dappType" type="text" placeholder="请输入应用类型">
+                                                </li>
+                                                <li class="na-me">
+                                                        <input class="balance" id="dappUrl" type="text" placeholder="请输入官网URL">
+                                                </li>
+                                                <div class="clearfix"></div>
+                                            </ul>
+                                            <div class="sub-bn form-group" style="text-align: center">
+                                                <!-- <div class="col-sm-6"> -->
+                                                    <button type="button" class="btn btn-primary btn-block waves-effect waves-light" onclick="tianjia();">确定</button>
+                                                <!-- </div> -->
+                                                <!-- <div class="col-sm-6">
+                                                <form>
+                                                    <button class="subbtn">取消</button>
+                                                </form>
+                                                </div> -->
+                                            </div>
+                                    </div>
+                                </div>
+                            </section>
+                    </div>
+                </div>
+        </div>
+
+
+        <!-- jQuery  -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/popper.min.js"></script>
+        <script src="assets/js/bootstrap.min.js"></script>
+        <script src="assets/js/modernizr.min.js"></script>
+        <script src="assets/js/waves.js"></script>
+        <script src="assets/js/jquery.slimscroll.js"></script>
+        <script src="assets/js/jquery.nicescroll.js"></script>
+        <script src="assets/js/jquery.scrollTo.min.js"></script>
+
+        <script src="assets/plugins/skycons/skycons.min.js"></script>
+        <script src="assets/plugins/raphael/raphael-min.js"></script>
+        <script src="assets/plugins/morris/morris.min.js"></script>
+        
+        <script src="assets/pages/dashborad.js"></script>
+        <!-- App js -->
+        <script src="assets/js/app.js"></script>
+        <script>
+            /* BEGIN SVG WEATHER ICON */
+            if (typeof Skycons !== 'undefined'){
+           var icons = new Skycons(
+               {"color": "#fff"},
+               {"resizeClear": true}
+               ),
+                   list  = [
+                       "clear-day", "clear-night", "partly-cloudy-day",
+                       "partly-cloudy-night", "cloudy", "rain", "sleet", "snow", "wind",
+                       "fog"
+                   ],
+                   i;
+
+               for(i = list.length; i--; )
+               icons.set(list[i], list[i]);
+               icons.play();
+           };
+
+       // scroll
+
+       $(document).ready(function() {
+       
+       $("#boxscroll").niceScroll({cursorborder:"",cursorcolor:"#cecece",boxzoom:true});
+       $("#boxscroll2").niceScroll({cursorborder:"",cursorcolor:"#cecece",boxzoom:true}); 
+       $("#boxscroll3").niceScroll({cursorborder:"",cursorcolor:"#cecece",boxzoom:true}); 
+       
+       });
+       </script>
+       <!-- 加载数据 -->
+       <script>
+            
+            var Neb = require("nebulas").Neb;
+            var HttpRequest = require("nebulas").HttpRequest
+            var NebPay = require("nebpay");
+            var nebPay = new NebPay(); 
+            var Account = require("nebulas").Account;
+            var contractAddress = "n1rjDKkqyho4j39cUzZpQ9ay97jq4UYiaQ1";
+            var intervalQuery;
+
+            var neb = new Neb();
+            var chainId = 1;
+            var netWork = "https://mainnet.nebulas.io"
+            //var chainId = 1001;
+            //var netWork = "https://testnet.nebulas.io"
+            neb.setRequest(new HttpRequest(netWork));
+            
+            function getUrl(url) {
+                return new Promise( function(resolve, reject){
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('get',url,true);
+                    xhr.responseType ='json';
+                    xhr.onload =  function(){
+                        var status = xhr.status;
+                        if (status == 200) {
+                            var resp = xhr.response;
+                            var page = resp.data.totalPage;
+                            var txList = resp.data.txnList;
+                            var txCnt = resp.data.txnCnt;
+                            var result = {
+                                page: page,
+                                txList: txList,
+                                txCnt: txCnt,
+                                stop: stop
+                            }
+                            resolve(result);
+                        } else {
+                            reject(status);
+                        }
+                    };
+                    xhr.send();
+                })
+            }
+
+            function getDapp(address){
+                return new Promise( function(resolve, reject){
+                    var taskList = new Array();
+                    var firstUrl= `https://explorer.nebulas.io/main/api/tx?a=${address}&p=1`;
+                    getUrl(firstUrl).then(function(result){
+                        var page = result.page;
+                        var txList = result.txList;
+                        var txCnt = result.txCnt;
+                        console.log(txCnt)
+                        for (var i=2; i<= parseInt(page); i++) {
+                            var url = `https://explorer.nebulas.io/main/api/tx?a=${address}&p=${i}`;
+                            taskList.push(getUrl(url))
+                        }
+                        Promise.all(taskList).then(function(dataList) {
+                            for (var j=0; j< dataList.length; j++) {
+                                var data = dataList[j];
+                                var newTxList = data.txList;
+                                txList = txList.concat(newTxList);
+                            }
+                            var result = {
+                                txCnt: txCnt,
+                                txList: txList
+                            }
+                            resolve(result)
+                        })
+                    })   
+                });
+            };
+
+            function startHttpQuery(){
+                var urlParameters = location.search;
+                var dapp = new Object();
+                if (urlParameters.indexOf('?') != -1)
+                {
+                    //获取请求参数的字符串
+                    var parameters = decodeURI(urlParameters.substr(1));
+                    //将请求的参数以&分割中字符串数组
+                    parameterArray = parameters.split('&');
+                    //循环遍历，将请求的参数封装到请求参数的对象之中
+                    for (var i = 0; i < parameterArray.length; i++) {
+                        dapp[parameterArray[i].split('=')[0]] = (parameterArray[i].split('=')[1]);
+                    }
+                    console.info('theRequest is =====',dapp);
+                }
+                else
+                {
+                    console.info('参数错误');
+                    document.write('<h1>参数错误!</h1>')
+                }
+
+                if (dapp.url == "undefined" || !dapp.url || typeof(dapp.url) != 'string'){
+                    dapp.url = "#"
+                }
+
+                document.getElementById("dappName").innerText = dapp.name;
+                var btn = `<button href="${dapp.url}" class="btn btn-outline-primary btn-block" type="button" onClick="location.href='${dapp.url}'", style="margin-top:10px">点击进入官网</button> `
+                document.getElementById("brife").insertAdjacentHTML('beforeend', btn)
+                getDapp(dapp.address).then(function(result){
+                    var txList = result.txList;
+                    var txCnt = result.txCnt;
+                    document.getElementById("totalVolume").innerText = txCnt;
+                    var balance = txList[0].to.balance;
+                    document.getElementById("balance").innerText = (balance/1e18).toFixed(2);
+                    
+                    var dauUser = new Set();
+                    var totalUser = new Set();
+                    var dailyVolume = 0;
+                    var dailyHash;
+                    for (var i=0; i<txList.length; i++){
+                        var tx = txList[i];
+                        var timeDiff = tx.timeDiff;
+                        if (timeDiff <= 86400000){
+                            var userCount = dauUser.size
+                            dauUser.add(tx.from.hash)
+                            var newUserCount = dauUser.size
+                            dailyVolume += 1;
+                            var timeAgo;
+                            if (timeDiff < 3600000){
+                                timeAgo = parseInt(timeDiff/60000) + " 分钟前"
+                            } else {
+                                timeAgo = parseInt(timeDiff/3600000) + " 小时前"
+                            }
+                            var from = tx.from.hash;
+                            var fromBalance = (tx.from.balance/1e18).toFixed(2);
+                            var hash = tx.hash;
+                            try{
+                            var func = JSON.parse(tx.data).Function
+                            var args = JSON.parse(tx.data).Args
+                            } catch(err) {
+                                console.log(err)
+                            }
+                            //console.log(tx.data)
+                            //console.log(JSON.parse(tx.data))
+                            var volumeHtml = `
+                            <li class="p-3">
+                                <div class="media">
+                                    <div class="media-body">
+                                        <p class="media-heading mb-0"><a href="https://explorer.nebulas.io/#/tx/${hash}" onHover>${hash}</a><i class="fa text-success mr-1 pull-right">时间:</i></p>
+                                        <small class="pull-right text-success">${timeAgo}</small>
+                                        <small class="text-success">${func}:${args}</small>
+                                    </div>
+                                </div>
+                            </li>`
+                            document.getElementById("boxscroll3").insertAdjacentHTML('beforeend', volumeHtml)
+                            if (newUserCount > userCount) {
+                                var dauHtml = `
+                                <li class="p-3">
+                                    <div class="media">
+                                        <div class="media-body">
+                                            <p class="media-heading mb-0"><a href="https://explorer.nebulas.io/#/address/${from}">${from}</a><i class="fa text-success mr-1 pull-right">时间:</i></p>
+                                            <small class="pull-right text-success">${timeAgo}</small>
+                                            <small class="text-success">≈ ${fromBalance} NAS</small>
+                                        </div>
+                                    </div>
+                                </li>`
+                                document.getElementById("boxscroll2").insertAdjacentHTML('beforeend', dauHtml)
+                            }
+                        }
+
+
+                        totalUser.add(tx.from.hash)
+                    }
+                    document.getElementById("volume").innerText = dailyVolume;
+                    document.getElementById("dau").innerText = dauUser.size;
+                    document.getElementById("totalUser").innerText = totalUser.size;
+                })
+
+            }
+            
+            function tianjia(){
+                var name = document.getElementById("dappName").value.trim();
+                var type = document.getElementById("dappType").value.trim();
+                var address = document.getElementById("dappAddress").value.trim();
+                var url = document.getElementById("dappUrl").value.trim();
+                if(!name || !type || !address ){
+                    alert("请填写必要的参数！")
+                } else {
+                    var dapp = {
+                        name: name,
+                        type: type,
+                        address: address,
+                        url: url
+                    }
+                    var to = contractAddress;
+                    var value = 0;
+                    var callFunction = "savePrivate";
+                    var callArgs =  JSON.stringify([dapp]);
+                    var options = {
+                        listener: function (resp) {
+                            intervalQuery = setInterval(function() {
+                                funcIntervalQuery(resp.txhash);
+                            }, 5000);
+                        }
+                    }
+                    //发送交易(发起智能合约调用)
+                    nebPay.call(to, value, callFunction, callArgs, options);
+                }
+
+            }
+
+            function funcIntervalQuery(txhash) {
+                newWindow.innerHTML = `<h4>正在查询结果，请稍等...</h4>`
+                newWindow1.innerHTML = `<h4>正在查询结果，请稍等...</h4>`
+                receiptTransaction(txhash).then(function(resp){
+                    var respObject = resp;
+                    console.log(respObject)
+                    if (respObject.status == 1){
+                        clearInterval(intervalQuery);
+                        newWindow.innerHTML = `<h4>执行成功!</h4>`
+                        newWindow1.innerHTML = `<h4>应用添加成功!</h4>`
+                        //location.reload();
+                        setTimeout(location.reload(), 3000)
+                    } else if (respObject.status == 0) {
+                        newWindow.innerHTML = `
+                        <h4>啊哦，好像哪里出错了！</h4>
+                        <h4>您可以根据以下哈希，再次确认您的交易状态:</h4>
+                        <div class="hash">
+                            <p>${txhash}</p>
+                        </div>`
+                    }
+                }).catch(function(err){
+                    newWindow.innerHTML = `
+                    <h4>啊哦，好像哪里出错了！</h4>
+                    <h4>您可以根据以下哈希，再次确认您的交易状态:</h4>
+                        <div class="hash">
+                            <p>${txhash}</p>
+                        </div>`
+                })
+            }
+
+            var receiptTransaction = function(txhash) {
+                var promise = new Promise(function(resolve, reject){
+                    neb.api.getTransactionReceipt(txhash).then(function (resp) {
+                        resolve(resp);
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
+                });
+                return promise
+            }
+
+
+       </script>
+
+    </body>
+</html>

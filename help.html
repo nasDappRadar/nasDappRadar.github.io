@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+        <title>Annex - Responsive Bootstrap 4 Admin Dashboard</title>
+        <meta content="Admin Dashboard" name="description" />
+        <meta content="Mannatthemes" name="author" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+        <link href="assets/plugins/morris/morris.css" rel="stylesheet">
+
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/icons.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/style.css" rel="stylesheet" type="text/css">
+
+        <!-- <link href="assets/css/bootstrap.css" rel='stylesheet' type='text/css' /> -->
+        <link href="assets/css/style.1.css" rel='stylesheet' type='text/css' />
+        <link href="assets/css/animate.css" rel="stylesheet" type="text/css" media="all">
+
+    </head>
+
+
+    <body onload="loadDapps();">
+
+        <!-- Loader -->
+        <div id="preloader"><div id="status"><div class="spinner"></div></div></div>
+
+        <!-- Navigation Bar-->
+        <header id="topnav">
+            <div class="topbar-main">
+                <div class="container-fluid">
+                    <div class="logo">
+                        <!-- Text Logo -->
+                        <!-- <a href="index.html" class="logo">
+                        Annex
+                        </a> -->
+                        <!-- Image Logo -->
+                        <a href="index.html" class="logo">
+                            <!-- <img src="assets/images/radar.png" alt="" height="22" class="logo-small"> -->
+                            <img src="assets/images/radar.png" alt="" height="20" class="logo-large">
+                            星云应用雷达
+                        </a>
+
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                </div> 
+            </div>
+            
+            <div class="navbar-custom">
+                <div class="container-fluid">
+                    <div id="navigation">
+                       
+                        <ul class="navigation-menu">
+
+                            <li class="has-submenu">
+                                <a href="index.html"><i class="mdi mdi-bank"></i>主页</a>
+                            </li>
+
+                            <li class="has-submenu">
+                                    <a href="#" data-toggle="modal" data-target="#myModal4"><i class="mdi mdi-basket-fill"></i>添加应用</a>
+                            </li>
+
+                            <li class="has-submenu">
+                                    <a href=""><i class="mdi mdi-book-open-page-variant"></i>使用教程</a>
+                            </li>
+
+                            <li class="has-submenu">
+                                    <a href="#" data-toggle="modal" data-target="#myModal2"><i class="mdi mdi-email"></i>联系我们</a>
+                            </li>
+                        </ul>
+                    </div> 
+                </div> 
+            </div> 
+        </header>
+        <!-- End Navigation Bar-->
+
+        <!-- wrapper -->
+        <div class="wrapper">
+                <div class="container-fluid">
+    
+                    <!-- Page-Title -->
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="page-title-box">
+                                <div class="btn-group pull-right">
+                                    <ol class="breadcrumb hide-phone p-0 m-0">
+                                    </ol>
+                                </div>
+                                <h4 class="page-title">使用教程</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end page title end breadcrumb -->
+                    
+    
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card m-b-30">
+                                <div class="card-body">
+    
+                                    <h4 class="mt-0 header-title">网站简介</h4>
+                                    <p class="text-muted m-b-30 font-14">
+                                        星云应用雷达，是一款帮助用户和开发者更加直观了解星云Dapp的网站平台，在这里用户和开发者可以全方位监控自己关注的Dapp的各种数据信息。
+                                    </p>
+    
+                                    <h4 class="mt-0 header-title">技术支持</h4>
+                                    <p class="text-muted m-b-30 font-14">
+                                        本应用基于星云链开发，如果您想关注或添加自己的应用，需要先安装<a href="https://github.com/ChengOrangeJu/WebExtensionWallet">星云浏览器插件</a>。<br>
+                                        网站已经做过移动端适配，推荐在手机上使用本应用，如果您想在手机上关注或添加自己的应用，需要下载<a href="https://github.com/ChengOrangeJu/WebExtensionWallet">星云手机钱包</a>。
+                                    </p>
+    
+                                    <h5 class="mt-0 header-title">网站首页</h5>
+                                    <p class="text-muted m-b-30 font-14">
+                                        网站首页展示了获得星云奖励的优秀Dapp列表，用户可以在首页直观的看到Dapp的合约余额，日活跃用户，日调用量，和周调用量等信息。<br>
+                                        可以通过点击应用名称可以进入到Dapp详情页面，也可以通过点击关注将应用添加到自己的应用列表。<br>
+                                    </p>
+                            
+    
+                                    <h5 class="mt-0 header-title">应用详情页</h5>
+                                    <p class="text-muted m-b-30 font-14">
+                                            通过点击应用名称可以进入到Dapp详情页面，在这里用户可以看到应用最近24小时的使用用户，以及账户的余额，最近调用时间等信息。<br>
+                                            在Dapp详情页面，还能看到应用最近24小时的每一个调用操作的哈希值，调用的函数名称，调用函数传递的参数，以及最近调用时间。<br>
+                                            点击用户地址和哈希值，可以直接跳转到星云官方区链浏览器的详情页面。
+                                    </p>
+                                
+                                    <h5 class="mt-0 header-title">个人中心</h5>
+                                    <p class="text-muted m-b-30 font-14">网站首页展示的是获得星云奖励的优秀Dapp列表，您可以关注这些优秀Dapp，也可以添加自己的Dapp到个人主页。<br>
+                                        在网站主页右上角输入框输入自己的账户地址，点击登录，即可进入个人中心，只查看自己关注和添加的应用列表。<br>
+                                        为了确保首页应用质量，您添加的应用只会在您的个人页面展示，如果您希望展示到首页列表，让其他人都看到，您可以通过邮箱联系我们。
+                                    </p>
+    
+                                    <h5 class="mt-0 header-title">词语释义</h5>
+                                    <p class="text-muted m-b-30 font-14"><strong>余额：</strong>合约账户中拥有的星云币余额，单位为NAS</p>
+                                    <p class="text-muted m-b-30 font-14"><strong>日活：</strong>合约24小时内的调用人数 (如果调用超过500次，只显示近500次的调用人数)</p>
+                                    <p class="text-muted m-b-30 font-14"><strong>日量：</strong>合约24小时内被调用的次数 (如果调用超过500次，只显示最近500次调用)</p>
+                                    <p class="text-muted m-b-30 font-14"><strong>周量：</strong>合约7天内被调用的次数 (如果调用超过500次，只显示近500次的调用)</p>
+                                    <p class="text-muted m-b-30 font-14"><strong>关注：</strong>您可以通过点击关注按钮，将您喜欢的应用添加到您的个人主页</p>
+                                    <p class="text-muted m-b-30 font-14"><strong>删除：</strong>您可以通过点击删除按钮，将应用从您的个人列表页面删除</p>
+                                    <p class="text-muted m-b-30 font-14"><strong>24H活跃用户：</strong>24小时内调用合约的账户地址，账户余额和最近一次调用时间</p>
+                                    <p class="text-muted m-b-30 font-14"><strong>24H交易数据：</strong>24小时内调用合约的HASH地址，调用函数，参数和最近一次调用时间</p>
+                                
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--end row-->
+    
+                </div> <!-- end container -->
+            </div>
+        <!-- end wrapper -->
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                            © 2018 本网站由<a href="https://nebulas.io/cn/">星云链</a>提供区块链服务.
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- End Footer -->
+        <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>						
+                        </div>
+                            <section>
+                                <div class="modal-body modal-spa">
+                                    <div class="writ", id="newWindow">
+                                        <h4>欢迎通过以下邮箱与我联系：</h4>
+                                        <h4>17780487248@163.com</h4>
+                                    </div>
+                                </div>
+                            </section>
+                    </div>
+                </div>
+        </div>
+        
+        <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>						
+                        </div>
+                            <section>
+                                <div class="modal-body modal-spa">
+                                    <div class="writ", id="newWindow">
+                                        <h4>请在浏览器插件中完成操作！</h4>
+                                    </div>
+                                </div>
+                            </section>
+                    </div>
+                </div>
+        </div>
+
+        <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>						
+                        </div>
+                            <section>
+                                <div class="modal-body modal-spa">
+                                    <div class="writ", id="newWindow1">
+                                        <h4>添加应用</h4>
+                                            <ul>
+                                                <li class="na-me">
+                                                    <input class="name" id="dappName" type="text" placeholder="请输入应用名称">
+                                                </li>
+                                                <li class="na-me">
+                                                    <input class="address" id="dappAddress" type="text" placeholder="请输入合约地址">
+                                                </li>
+                                                <li class="na-me">
+                                                    <input class="balance" id="dappType" type="text" placeholder="请输入应用类型">
+                                                </li>
+                                                <li class="na-me">
+                                                        <input class="balance" id="dappUrl" type="text" placeholder="请输入官网URL">
+                                                </li>
+                                                <div class="clearfix"></div>
+                                            </ul>
+                                            <div class="sub-bn form-group" style="text-align: center">
+                                                <!-- <div class="col-sm-6"> -->
+                                                    <button type="button" class="btn btn-primary btn-block waves-effect waves-light" onclick="tianjia();">确定</button>
+                                                <!-- </div> -->
+                                                <!-- <div class="col-sm-6">
+                                                <form>
+                                                    <button class="subbtn">取消</button>
+                                                </form>
+                                                </div> -->
+                                            </div>
+                                    </div>
+                                </div>
+                            </section>
+                    </div>
+                </div>
+        </div>
+
+
+        <!-- jQuery  -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/popper.min.js"></script>
+        <script src="assets/js/bootstrap.min.js"></script>
+        <script src="assets/js/modernizr.min.js"></script>
+        <script src="assets/js/waves.js"></script>
+        <script src="assets/js/jquery.slimscroll.js"></script>
+        <script src="assets/js/jquery.nicescroll.js"></script>
+        <script src="assets/js/jquery.scrollTo.min.js"></script>
+        <script src="assets/plugins/skycons/skycons.min.js"></script>
+        <script src="assets/plugins/raphael/raphael-min.js"></script>
+        <script src="assets/plugins/morris/morris.min.js"></script>
+        <script src="assets/pages/dashborad.js"></script>
+
+        <!-- App js -->
+        <script src="assets/js/app.js"></script>
+        <script src="lib/nebulas.js"></script>
+         <script src="lib/nebPay.js"></script>
+        <script>
+
+            'use strict';
+            var Neb = require("nebulas").Neb;
+            var HttpRequest = require("nebulas").HttpRequest
+            var NebPay = require("nebpay");
+            var nebPay = new NebPay(); 
+            var Account = require("nebulas").Account;
+            var contractAddress = "n1rjDKkqyho4j39cUzZpQ9ay97jq4UYiaQ1";
+            var intervalQuery;
+
+            var neb = new Neb();
+            var chainId = 1;
+            var netWork = "https://mainnet.nebulas.io"
+            //var chainId = 1001;
+            //var netWork = "https://testnet.nebulas.io"
+            neb.setRequest(new HttpRequest(netWork));
+
+            function tianjia(){
+                var name = document.getElementById("dappName").value.trim();
+                var type = document.getElementById("dappType").value.trim();
+                var address = document.getElementById("dappAddress").value.trim();
+                var url = document.getElementById("dappUrl").value.trim();
+                if(!name || !type || !address ){
+                    alert("请填写必要的参数！")
+                } else {
+                    var dapp = {
+                        name: name,
+                        type: type,
+                        address: address,
+                        url: url
+                    }
+                    var to = contractAddress;
+                    var value = 0;
+                    var callFunction = "savePrivate";
+                    var callArgs =  JSON.stringify([dapp]);
+                    var options = {
+                        listener: function (resp) {
+                            intervalQuery = setInterval(function() {
+                                funcIntervalQuery(resp.txhash);
+                            }, 5000);
+                        }
+                    }
+                    //发送交易(发起智能合约调用)
+                    nebPay.call(to, value, callFunction, callArgs, options);
+                }
+
+            }
+
+            function funcIntervalQuery(txhash) {
+                newWindow.innerHTML = `<h4>正在查询结果，请稍等...</h4>`
+                newWindow1.innerHTML = `<h4>正在查询结果，请稍等...</h4>`
+                receiptTransaction(txhash).then(function(resp){
+                    var respObject = resp;
+                    console.log(respObject)
+                    if (respObject.status == 1){
+                        clearInterval(intervalQuery);
+                        newWindow.innerHTML = `<h4>执行成功!</h4>`
+                        newWindow1.innerHTML = `<h4>应用添加成功!</h4>`
+                        //location.reload();
+                        setTimeout(location.reload(), 3000)
+                    } else if (respObject.status == 0) {
+                        newWindow.innerHTML = `
+                        <h4>啊哦，好像哪里出错了！</h4>
+                        <h4>您可以根据以下哈希，再次确认您的交易状态:</h4>
+                        <div class="hash">
+                            <p>${txhash}</p>
+                        </div>`
+                    }
+                }).catch(function(err){
+                    newWindow.innerHTML = `
+                    <h4>啊哦，好像哪里出错了！</h4>
+                    <h4>您可以根据以下哈希，再次确认您的交易状态:</h4>
+                        <div class="hash">
+                            <p>${txhash}</p>
+                        </div>`
+                })
+            }
+
+            var receiptTransaction = function(txhash) {
+                var promise = new Promise(function(resolve, reject){
+                    neb.api.getTransactionReceipt(txhash).then(function (resp) {
+                        resolve(resp);
+                    }).catch(function(err) {
+                        console.log(err);
+                    });
+                });
+                return promise
+            }
+
+        </script>
+
+
+
+    </body>
+</html>
