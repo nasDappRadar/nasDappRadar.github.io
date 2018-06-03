@@ -304,16 +304,16 @@
                                         <h4>添加应用</h4>
                                             <ul>
                                                 <li class="na-me">
-                                                    <input class="name" id="dappName" type="text" placeholder="请输入应用名称">
+                                                    <input class="name" id="dappName" type="text" placeholder="请输入应用名称(必填)">
                                                 </li>
                                                 <li class="na-me">
-                                                    <input class="address" id="dappAddress" type="text" placeholder="请输入合约地址">
+                                                    <input class="balance" id="dappType" type="text" placeholder="请输入应用类型(必填)">
                                                 </li>
                                                 <li class="na-me">
-                                                    <input class="balance" id="dappType" type="text" placeholder="请输入应用类型">
+                                                    <input class="address" id="dappAddress" type="text" placeholder="请输入合约地址(必填)">
                                                 </li>
                                                 <li class="na-me">
-                                                        <input class="balance" id="dappUrl" type="text" placeholder="请输入官网URL">
+                                                        <input class="balance" id="dappUrl" type="text" placeholder="请输入官网URL(选填)">
                                                 </li>
                                                 <div class="clearfix"></div>
                                             </ul>
@@ -352,7 +352,7 @@
         <!-- App js -->
         <script src="assets/js/app.js"></script>
         <script src="lib/nebulas.js"></script>
-         <script src="lib/nebPay.js"></script>
+        <script src="lib/nebPay.js"></script>
         <script>
 
             'use strict';
@@ -462,7 +462,8 @@
                     alert("您还没有自己的应用，快去添加或者关注吧！")
                 } else{
                 Promise.all(queryList).then(function(dataList){
-                    var totalDapp = data.length;
+                    console.log(dataList)
+                    var totalDapp = 0;
                     var totalBalance = 0;
                     var totalTrade = 0;
                     var totalDau = new Set();  
@@ -478,87 +479,81 @@
                         var dailyBalance = 0;
                         var weeklyBalance = 0;
 
-                        var balance = txList[0].to.balance;
-                        totalBalance += parseInt(balance);
+                        var balance = 0
+                        if (txList.length > 0){
+                            console.log(txList)
+                            balance = txList[0].to.balance;
+                            totalDapp += 1;
+                            totalBalance += parseInt(balance);
 
-                        for (var j=0; j<txList.length; j+=1){
-                            var tx = txList[j];
-                            var timeDiff = tx.currentTimestamp - tx.createdAt;
-                            if (timeDiff <= 86400000){
-                                dauSet.add(tx.from.hash)
-                                totalDau.add(tx.from.hash)
-                                
-                                dailyVolume += 1;
-                                dailyBalance += parseInt(tx.value);
-                                
-                                totalTrade += 1;
-                                
-                                weeklyVolume += 1;
-                                weeklyBalance += parseInt(tx.value);
+                            for (var j=0; j<txList.length; j+=1){
+                                var tx = txList[j];
+                                var timeDiff = tx.currentTimestamp - tx.createdAt;
+                                if (timeDiff <= 86400000){
+                                    dauSet.add(tx.from.hash)
+                                    totalDau.add(tx.from.hash)
+                                    
+                                    dailyVolume += 1;
+                                    dailyBalance += parseInt(tx.value);
+                                    
+                                    totalTrade += 1;
+                                    
+                                    weeklyVolume += 1;
+                                    weeklyBalance += parseInt(tx.value);
 
-                            } else if (timeDiff <= 604800000){
-                                
-                                weeklyVolume += 1;
-                                weeklyBalance += parseInt(tx.value);
+                                } else if (timeDiff <= 604800000){
+                                    
+                                    weeklyVolume += 1;
+                                    weeklyBalance += parseInt(tx.value);
+                                }
                             }
-                        }
+                            var demicals = 1e18;
+                            var buttonColor
+                            if (dapp.type == '游戏') {
+                                buttonColor = "success"
+                            } else if (dapp.type == '工具'){
+                                buttonColor = "warning"
+                            } else {
+                                buttonColor = "danger"
+                            }
+                            
+                            var guanzhu;
+                            if (!login){
+                                guanzhu = `<button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="guanzhu(${dapp.id});" data-toggle="modal" data-target="#myModal3">关注</button>`
+                            } else {
+                                guanzhu = `<button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="shanchu(${dapp.id});" data-toggle="modal" data-target="#myModal3">删除</button>`
+                            }
+                            
+                            var newTr = `
+                            <tr>
+                                <td>${i+1}</td>
+                                <td>
+                                    <a href="./detail.html?name=${dapp.name}&address=${dapp.address}&url=${dapp.url}">${dapp.name}</a>
+                                </td>
+                                <td> <button type="button" class="btn btn-${buttonColor} waves-effect waves-light">${dapp.type}</button></td>
+                                <td>${(balance/demicals).toFixed(2)}</td>
+                                <td>${dauSet.size}</td> 
+                                <td>${dailyVolume}</td>
+                                <td>${weeklyVolume}</td>                                   
+                                <td>
+                                    ${guanzhu}
+                                </td>
+                            </tr>`
+                            //<td>${dailyVolume}/${weeklyVolume}</td>
+                            //<td>${(dailyBalance/demicals).toFixed(2)}/${(dailyBalance/demicals).toFixed(2)}</td>
+                            
+                            document.getElementById("dappList").insertAdjacentHTML('beforeend', newTr)
+
+                            }
+                    
                         var demicals = 1e18;
-                        var buttonColor
-                        if (dapp.type == '游戏') {
-                            buttonColor = "success"
-                        } else if (dapp.type == '工具'){
-                            buttonColor = "warning"
-                        } else {
-                            buttonColor = "danger"
-                        }
+                        var fixedBalance = (totalBalance/demicals).toFixed(2)
                         
-                        var guanzhu;
-                        if (!login){
-                            guanzhu = `<button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="guanzhu(${dapp.id});" data-toggle="modal" data-target="#myModal3">关注</button>`
-                        } else {
-                            guanzhu = `<button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="shanchu(${dapp.id});" data-toggle="modal" data-target="#myModal3">删除</button>`
-                        }
+                        document.getElementById("totalDapp").innerText = totalDapp
+                        document.getElementById("totalBalance").innerText = fixedBalance
+                        document.getElementById("totalVolume").innerText = totalTrade
+                        document.getElementById("totalDau").innerText = totalDau.size
                         
-                        var newTr = `
-                        <tr>
-                            <td>${i+1}</td>
-                            <td>
-                                <a href="./detail.html?name=${dapp.name}&address=${dapp.address}&url=${dapp.url}">${dapp.name}</a>
-                            </td>
-                            <td> <button type="button" class="btn btn-${buttonColor} waves-effect waves-light">${dapp.type}</button></td>
-                            <td>${(balance/demicals).toFixed(2)}</td>
-                            <td>${dauSet.size}</td> 
-                            <td>${dailyVolume}</td>
-                            <td>${weeklyVolume}</td>                                   
-                            <td>
-                                ${guanzhu}
-                            </td>
-                        </tr>`
-                        //<td>${dailyVolume}/${weeklyVolume}</td>
-                        //<td>${(dailyBalance/demicals).toFixed(2)}/${(dailyBalance/demicals).toFixed(2)}</td>
-                        
-                        document.getElementById("dappList").insertAdjacentHTML('beforeend', newTr)
-
-
-                        console.log(dapp.name)
-                        console.log(dapp.address)
-                        console.log("余额:" + balance);
-                        console.log("日活:" + dauSet.size);
-                        console.log("日交易量:" + dailyVolume);
-                        console.log("周交易量:" + weeklyVolume);
-                        console.log("日交易额:" + dailyBalance);
-                        console.log("周交易额:" + weeklyBalance);
-
-                        }
-                   
-                    var demicals = 1e18;
-                    var fixedBalance = (totalBalance/demicals).toFixed(2)
-                    
-                    document.getElementById("totalDapp").innerText = totalDapp
-                    document.getElementById("totalBalance").innerText = fixedBalance
-                    document.getElementById("totalVolume").innerText = totalTrade
-                    document.getElementById("totalDau").innerText = totalDau.size
-                    
                     /*
                     // 判断数量增加百分比
                     var storageData = {
@@ -645,13 +640,8 @@
                         <h6 class="m-0 float-right text-center text-danger">
                         <i class="mdi mdi-arrow-down"></i> <span>${Percent}%</span></6>`
                     }   */
+                    }
                 })  
-                
-                
-                //console.log("Dapp总量:" + totalDapp);
-                //console.log("总金额:" + totalBalance);
-                //console.log("日交易量:" + totalTrade);
-                //console.log("日交易额:" + totalTradeBalance);
             }
             };
 
@@ -816,7 +806,10 @@
                 var type = document.getElementById("dappType").value.trim();
                 var address = document.getElementById("dappAddress").value.trim();
                 var url = document.getElementById("dappUrl").value.trim();
-                if(!name || !type || !address ){
+                
+                if (!Account.isValidAddress(address)){
+                    alert("您输入的地址不正确，请重新确认合约地址！")
+                }else if(!name || !type || !address ){
                     alert("请填写必要的参数！")
                 } else {
                     var dapp = {
@@ -853,6 +846,11 @@
                         newWindow.innerHTML = `<h4>执行成功!</h4>`
                         newWindow1.innerHTML = `<h4>应用添加成功!</h4>`
                         //location.reload();
+                        var address = resp.from;
+                        console.log(address)
+                        login = true;
+                        localStorage.setItem("login", true)
+                        localStorage.setItem("userAddress", address)
                         setTimeout(location.reload(), 3000)
                     } else if (respObject.status == 0) {
                         newWindow.innerHTML = `
@@ -871,7 +869,7 @@
                         </div>`
                 })
             }
-
+            
             var receiptTransaction = function(txhash) {
                 var promise = new Promise(function(resolve, reject){
                     neb.api.getTransactionReceipt(txhash).then(function (resp) {

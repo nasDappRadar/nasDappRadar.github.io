@@ -312,16 +312,16 @@
                                         <h4>添加应用</h4>
                                             <ul>
                                                 <li class="na-me">
-                                                    <input class="name" id="dappName" type="text" placeholder="请输入应用名称">
+                                                    <input class="name" id="dappName" type="text" placeholder="请输入应用名称(必填)">
                                                 </li>
                                                 <li class="na-me">
-                                                    <input class="address" id="dappAddress" type="text" placeholder="请输入合约地址">
+                                                    <input class="balance" id="dappType" type="text" placeholder="请输入应用类型(必填)">
                                                 </li>
                                                 <li class="na-me">
-                                                    <input class="balance" id="dappType" type="text" placeholder="请输入应用类型">
+                                                    <input class="address" id="dappAddress" type="text" placeholder="请输入合约地址(必填)">
                                                 </li>
                                                 <li class="na-me">
-                                                        <input class="balance" id="dappUrl" type="text" placeholder="请输入官网URL">
+                                                        <input class="balance" id="dappUrl" type="text" placeholder="请输入官网URL(选填)">
                                                 </li>
                                                 <div class="clearfix"></div>
                                             </ul>
@@ -570,7 +570,10 @@
                 var type = document.getElementById("dappType").value.trim();
                 var address = document.getElementById("dappAddress").value.trim();
                 var url = document.getElementById("dappUrl").value.trim();
-                if(!name || !type || !address ){
+                
+                if (!Account.isValidAddress(address)){
+                    alert("您输入的地址不正确，请重新确认合约地址！")
+                }else if(!name || !type || !address ){
                     alert("请填写必要的参数！")
                 } else {
                     var dapp = {
@@ -607,7 +610,12 @@
                         newWindow.innerHTML = `<h4>执行成功!</h4>`
                         newWindow1.innerHTML = `<h4>应用添加成功!</h4>`
                         //location.reload();
-                        setTimeout(location.reload(), 3000)
+                        var address = resp.from;
+                        console.log(address)
+                        login = true;
+                        localStorage.setItem("login", true)
+                        localStorage.setItem("userAddress", address)
+                        //setTimeout(windows.location.href="index.html", 3000)
                     } else if (respObject.status == 0) {
                         newWindow.innerHTML = `
                         <h4>啊哦，好像哪里出错了！</h4>
@@ -625,7 +633,7 @@
                         </div>`
                 })
             }
-
+            
             var receiptTransaction = function(txhash) {
                 var promise = new Promise(function(resolve, reject){
                     neb.api.getTransactionReceipt(txhash).then(function (resp) {
