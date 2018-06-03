@@ -228,7 +228,7 @@
                                                 <th class="border-top-0">余额</th>
                                                 <th class="border-top-0">日活</th>                                    
                                                 <th class="border-top-0">日量</th>
-                                                <th class="border-top-0">周量</th>
+                                                <th class="border-top-0"> 总量</th>
                                                 <th class="border-top-0">关注|删除</th>
                                             </tr>
                                         </thead>
@@ -382,8 +382,11 @@
                         var status = xhr.status;
                         if (status == 200) {
                             var resp = xhr.response;
+                            //console.log(resp)
                             var page = resp.data.totalPage;
                             var txList = resp.data.txnList;
+                            var txnCnt = resp.data.txnCnt;
+                            //console.log(resp)
                             var stop = 0;
                             for(var i=0; i<txList.length; i++) {
                                 var tx = txList[i];
@@ -396,6 +399,7 @@
                             var result = {
                                 page: page,
                                 txList: txList,
+                                txnCnt: txnCnt,
                                 stop: stop
                             }
 
@@ -417,6 +421,9 @@
                         var page = result.page;
                         var stop = result.stop;
                         var txList = result.txList;
+                        var txnCnt = result.txnCnt;
+                        console.log(txnCnt)
+                        //console.log(result)
                         if (stop == 0) {
                             for (var i=2; i<= parseInt(page); i++) {
                                 var url = `https://explorer.nebulas.io/main/api/tx?a=${address}&p=${i}`;
@@ -430,14 +437,16 @@
                                 }
                                 var result = {
                                     dapp: dapp,
-                                    txList: txList
+                                    txList: txList,
+                                    txnCnt: txnCnt
                                 }
                                 resolve(result)
                             })
                         } else {
                             var result = {
                                 dapp: dapp,
-                                txList: txList
+                                txList: txList,
+                                txnCnt: txnCnt
                             }
                             resolve(result)
                         }
@@ -462,7 +471,7 @@
                     alert("您还没有自己的应用，快去添加或者关注吧！")
                 } else{
                 Promise.all(queryList).then(function(dataList){
-                    console.log(dataList)
+                    //console.log(dataList)
                     var totalDapp = 0;
                     var totalBalance = 0;
                     var totalTrade = 0;
@@ -472,6 +481,8 @@
                         var result = dataList[i];
                         var dapp = result.dapp;
                         var txList = result.txList;
+                        var txnCnt = result.txnCnt;
+                        console.log(txnCnt)
                         
                         var dauSet = new Set();
                         var dailyVolume = 0;
@@ -534,11 +545,12 @@
                                 <td>${(balance/demicals).toFixed(2)}</td>
                                 <td>${dauSet.size}</td> 
                                 <td>${dailyVolume}</td>
-                                <td>${weeklyVolume}</td>                                   
+                                <td>${txnCnt}</td>                                   
                                 <td>
                                     ${guanzhu}
                                 </td>
                             </tr>`
+                            //<td>${weeklyVolume}</td>
                             //<td>${dailyVolume}/${weeklyVolume}</td>
                             //<td>${(dailyBalance/demicals).toFixed(2)}/${(dailyBalance/demicals).toFixed(2)}</td>
                             
