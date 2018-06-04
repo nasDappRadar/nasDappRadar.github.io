@@ -222,7 +222,8 @@
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th class="border-top-0" style="width:60px;">ID</th>
+                                                <!--<th class="border-top-0" style="width:60px;"><img src="assets/images/radar.png" alt="" height="20" class="logo-large"></th>
+                                                -->
                                                 <th class="border-top-0">名称</th>
                                                 <th class="border-top-0">应用类型</th>
                                                 <th class="border-top-0">余额</th>
@@ -372,6 +373,12 @@
             neb.setRequest(new HttpRequest(netWork));
 
             var login = localStorage.getItem("login");
+            var totalDapp = 0;
+            var totalBalance = 0;
+            var totalTrade = 0;
+            var totalDau = new Set();
+            var liList = new Array();
+            var sortList = new Array();
 
             function getUrl(url) {
                 return new Promise( function(resolve, reject){
@@ -402,7 +409,6 @@
                                 txnCnt: txnCnt,
                                 stop: stop
                             }
-
                             resolve(result);
                         } else {
                             reject(status);
@@ -440,6 +446,7 @@
                                     txList: txList,
                                     txnCnt: txnCnt
                                 }
+                                showLIst(result)
                                 resolve(result)
                             })
                         } else {
@@ -448,12 +455,117 @@
                                 txList: txList,
                                 txnCnt: txnCnt
                             }
+                            showLIst(result)
                             resolve(result)
                         }
                         
-                    })   
+                    }).catch(function(err) {
+                        console.log(err);
+                        resolve(null);
+                    });
                 });
             };
+
+            function showLIst(result) {
+                var dapp = result.dapp;
+                var txList = result.txList;
+                var txnCnt = result.txnCnt;
+                
+                var dauSet = new Set();
+                var dailyVolume = 0;
+                var weeklyVolume = 0;
+                var dailyBalance = 0;
+                var weeklyBalance = 0;
+
+                var balance = 0
+                if (txList.length > 0){
+                    console.log(txList)
+                    balance = txList[0].to.balance;
+                    totalDapp += 1;
+                    totalBalance += parseInt(balance);
+
+                    for (var j=0; j<txList.length; j+=1){
+                        var tx = txList[j];
+                        var timeDiff = tx.currentTimestamp - tx.createdAt;
+                        if (timeDiff <= 86400000){
+                            dauSet.add(tx.from.hash)
+                            totalDau.add(tx.from.hash)
+                            
+                            dailyVolume += 1;
+                            dailyBalance += parseInt(tx.value);
+                            
+                            totalTrade += 1;
+                            
+                            weeklyVolume += 1;
+                            weeklyBalance += parseInt(tx.value);
+
+                        } else if (timeDiff <= 604800000){
+                            
+                            weeklyVolume += 1;
+                            weeklyBalance += parseInt(tx.value);
+                        }
+                    }
+                    var demicals = 1e18;
+                    var buttonColor
+                    if (dapp.type == '游戏') {
+                        buttonColor = "success"
+                    } else if (dapp.type == '工具'){
+                        buttonColor = "warning"
+                    } else {
+                        buttonColor = "danger"
+                    }
+                    
+                    var guanzhu;
+                    if (!login){
+                        guanzhu = `<button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="guanzhu(${dapp.id});" data-toggle="modal" data-target="#myModal3">关注</button>`
+                    } else {
+                        guanzhu = `<button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="shanchu(${dapp.id});" data-toggle="modal" data-target="#myModal3">删除</button>`
+                    }
+                    
+                    var newTr = `
+                    <tr>
+                        
+                        <td>
+                            <a href="./detail.html?name=${dapp.name}&address=${dapp.address}&url=${dapp.url}">${dapp.name}</a>
+                        </td>
+                        <td> <button type="button" class="btn btn-${buttonColor} waves-effect waves-light">${dapp.type}</button></td>
+                        <td>${(balance/demicals).toFixed(2)}</td>
+                        <td>${dauSet.size}</td> 
+                        <td>${dailyVolume}</td>
+                        <td id="txnCnt">${txnCnt}</td>                                   
+                        <td>
+                            ${guanzhu}
+                        </td>
+                    </tr>`
+
+                    var liObj = {
+                        html: newTr,
+                        txnCnt: txnCnt
+                    }
+                    //<td>${weeklyVolume}</td>
+                    //<td>${dailyVolume}/${weeklyVolume}</td>
+                    //<td>${(dailyBalance/demicals).toFixed(2)}/${(dailyBalance/demicals).toFixed(2)}</td>
+                    
+                    
+                    liList.push(liObj);
+                    if (liList.length>1){
+                        liList.sort(function(li1, li2){
+                            var n1=parseInt(li1.txnCnt);  
+                            var n2=parseInt(li2.txnCnt);  
+                            return n2-n1;  //升序排列  
+                        });
+                        document.getElementById("dappList").innerHTML = ""
+                        for(var i=0;i<liList.length;i++){  
+                            document.getElementById("dappList").insertAdjacentHTML('beforeend', liList[i].html);   //排序之后再写入  
+                        } 
+                    } else {
+                        document.getElementById("dappList").innerHTML = ""
+                        document.getElementById("dappList").insertAdjacentHTML('beforeend', newTr)
+                    }
+
+                    }
+                    
+            }
 
             function startHttpQuery(data){     
                 var queryList = new Array();
@@ -472,6 +584,7 @@
                 } else{
                 Promise.all(queryList).then(function(dataList){
                     //console.log(dataList)
+                    /*
                     var totalDapp = 0;
                     var totalBalance = 0;
                     var totalTrade = 0;
@@ -558,103 +671,30 @@
 
                             }
                     
+                        //var demicals = 1e18;
+                        //var fixedBalance = (totalBalance/demicals).toFixed(2)
+                        
+                        //document.getElementById("totalDapp").innerText = totalDapp
+                        //document.getElementById("totalBalance").innerText = fixedBalance
+                        //document.getElementById("totalVolume").innerText = totalTrade
+                        //document.getElementById("totalDau").innerText = totalDau.size
+                        
+                        }
+                        */
                         var demicals = 1e18;
                         var fixedBalance = (totalBalance/demicals).toFixed(2)
-                        
+                        console.log(totalDapp)
+                        console.log(fixedBalance)
                         document.getElementById("totalDapp").innerText = totalDapp
                         document.getElementById("totalBalance").innerText = fixedBalance
                         document.getElementById("totalVolume").innerText = totalTrade
-                        document.getElementById("totalDau").innerText = totalDau.size
-                        
-                    /*
-                    // 判断数量增加百分比
-                    var storageData = {
-                        dapps: totalDapp,
-                        balance: fixedBalance,
-                        trade: totalTrade,
-                        user: totalDau.size
-                    }
+                        document.getElementById("totalDau").innerText = totalDau.size 
 
-                    var preData;
-                    if (login){
-                        var preData = localStorage.getItem("privateData")
-                        if(!preData) {
-                            preData = storageData
-                        } else {
-                            preData = JSON.parse(preData)
-                        }
-                        localStorage.setItem("privateData", JSON.stringify(storageData))
-                    }else{
-                        preData = localStorage.getItem("publicData")
-                        if(!preData) {
-                            preData = storageData
-                        } else {
-                            preData = JSON.parse(preData)
-                        }
-                        localStorage.setItem("publicData", JSON.stringify(storageData))
-                    }
 
-                    console.log(preData);
 
-                    var preDapps = preData.dapps;
-                    var preBalance = preData.balance;
-                    var preTrade = preData.trade;
-                    var preUser = preData.user;
-
-                    
-                    if(totalDapp >= preDapps){
-                        var Percent = ((totalDapp-preDapps)/preDapps).toFixed(2);
-                        document.getElementById("dappPercent").innerHTML = `
-                        <h6 class="m-0 float-right text-center text-success">
-                        <i class="mdi mdi-arrow-up"></i> <span>${Percent}%</span></6>`
-                    } else {
-                        var Percent = ((totalDapp-preDapps)/preDapps).toFixed(2);
-                        document.getElementById("dappPercent").innerHTML = `
-                        <h6 class="m-0 float-right text-center text-danger">
-                        <i class="mdi mdi-arrow-down"></i> <span>${Percent}%</span></6>`
-                    }
-
-                    
-                    if(fixedBalance >= preBalance){
-                        var Percent = ((fixedBalance-preBalance)/preBalance).toFixed(2);
-                        document.getElementById("balancePercent").innerHTML = `
-                        <h6 class="m-0 float-right text-center text-success">
-                        <i class="mdi mdi-arrow-up"></i> <span>${Percent}%</span></6>`
-                    } else {
-                        var Percent = ((preBalance-fixedBalance)/preBalance).toFixed(2);
-                        document.getElementById("balancePercent").innerHTML = `
-                        <h6 class="m-0 float-right text-center text-danger">
-                        <i class="mdi mdi-arrow-down"></i> <span>${Percent}%</span></6>`
-                    }
-
-                    
-                    if(totalTrade >= preTrade){
-                        var Percent = ((totalTrade-preTrade)/preTrade).toFixed(2);
-                        document.getElementById("tradePercent").innerHTML = `
-                        <h6 class="m-0 float-right text-center text-success">
-                        <i class="mdi mdi-arrow-up"></i> <span>${Percent}%</span></6>`
-                    } else {
-                        var Percent = ((preTrade-totalTrade)/preTrade).toFixed(2);
-                        document.getElementById("tradePercent").innerHTML = `
-                        <h6 class="m-0 float-right text-center text-danger">
-                        <i class="mdi mdi-arrow-down"></i> <span>${Percent}%</span></6>`
-                    }
-                    
-                    
-                    if(totalDau.size >= preUser){
-                        var Percent = ((totalDau.size-preUser)/preUser).toFixed(2);
-                        document.getElementById("userPercent").innerHTML = `
-                        <h6 class="m-0 float-right text-center text-success">
-                         <i class="mdi mdi-arrow-up"></i> <span>${Percent}%</span></6>`
-                    } else {
-                        var Percent = ((preUser-totalDau.size)/preUser).toFixed(2);
-                        document.getElementById("userPercent").innerHTML = `
-                        <h6 class="m-0 float-right text-center text-danger">
-                        <i class="mdi mdi-arrow-down"></i> <span>${Percent}%</span></6>`
-                    }   */
-                    }
-                })  
-            }
+                    })
+                     
+                }
             };
 
             function loadDapps() {
