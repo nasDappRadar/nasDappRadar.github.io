@@ -491,7 +491,7 @@
                 }
 
                 document.getElementById("dappName").innerText = dapp.name;
-                var btn = `<button href="${dapp.url}" class="btn btn-outline-primary btn-block" type="button" onClick="location.href='${dapp.url}'", style="margin-top:10px">点击进入官网</button> `
+                var btn = `<button href="${dapp.url}" class="btn btn-outline-primary btn-block" type="button" onClick="window.open('${dapp.url}')", style="margin-top:10px">点击进入官网</button> `
                 document.getElementById("brife").insertAdjacentHTML('beforeend', btn)
                 getDapp(dapp.address).then(function(result){
                     var txList = result.txList;
