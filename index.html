@@ -562,8 +562,16 @@
                         document.getElementById("dappList").innerHTML = ""
                         document.getElementById("dappList").insertAdjacentHTML('beforeend', newTr)
                     }
-
-                    }
+                    
+                    var demicals = 1e18;
+                    var fixedBalance = (totalBalance/demicals).toFixed(2)
+                    console.log(totalDapp)
+                    console.log(fixedBalance)
+                    document.getElementById("totalDapp").innerText = totalDapp
+                    document.getElementById("totalBalance").innerText = fixedBalance
+                    document.getElementById("totalVolume").innerText = totalTrade
+                    document.getElementById("totalDau").innerText = totalDau.size 
+                }
                     
             }
 
@@ -583,115 +591,7 @@
                     alert("您还没有自己的应用，快去添加或者关注吧！")
                 } else{
                 Promise.all(queryList).then(function(dataList){
-                    //console.log(dataList)
-                    /*
-                    var totalDapp = 0;
-                    var totalBalance = 0;
-                    var totalTrade = 0;
-                    var totalDau = new Set();  
-                    document.getElementById("dappList").innerHTML = ""
-                    for (var i=0; i<dataList.length; i++){
-                        var result = dataList[i];
-                        var dapp = result.dapp;
-                        var txList = result.txList;
-                        var txnCnt = result.txnCnt;
-                        console.log(txnCnt)
-                        
-                        var dauSet = new Set();
-                        var dailyVolume = 0;
-                        var weeklyVolume = 0;
-                        var dailyBalance = 0;
-                        var weeklyBalance = 0;
-
-                        var balance = 0
-                        if (txList.length > 0){
-                            console.log(txList)
-                            balance = txList[0].to.balance;
-                            totalDapp += 1;
-                            totalBalance += parseInt(balance);
-
-                            for (var j=0; j<txList.length; j+=1){
-                                var tx = txList[j];
-                                var timeDiff = tx.currentTimestamp - tx.createdAt;
-                                if (timeDiff <= 86400000){
-                                    dauSet.add(tx.from.hash)
-                                    totalDau.add(tx.from.hash)
-                                    
-                                    dailyVolume += 1;
-                                    dailyBalance += parseInt(tx.value);
-                                    
-                                    totalTrade += 1;
-                                    
-                                    weeklyVolume += 1;
-                                    weeklyBalance += parseInt(tx.value);
-
-                                } else if (timeDiff <= 604800000){
-                                    
-                                    weeklyVolume += 1;
-                                    weeklyBalance += parseInt(tx.value);
-                                }
-                            }
-                            var demicals = 1e18;
-                            var buttonColor
-                            if (dapp.type == '游戏') {
-                                buttonColor = "success"
-                            } else if (dapp.type == '工具'){
-                                buttonColor = "warning"
-                            } else {
-                                buttonColor = "danger"
-                            }
-                            
-                            var guanzhu;
-                            if (!login){
-                                guanzhu = `<button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="guanzhu(${dapp.id});" data-toggle="modal" data-target="#myModal3">关注</button>`
-                            } else {
-                                guanzhu = `<button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="shanchu(${dapp.id});" data-toggle="modal" data-target="#myModal3">删除</button>`
-                            }
-                            
-                            var newTr = `
-                            <tr>
-                                <td>${i+1}</td>
-                                <td>
-                                    <a href="./detail.html?name=${dapp.name}&address=${dapp.address}&url=${dapp.url}">${dapp.name}</a>
-                                </td>
-                                <td> <button type="button" class="btn btn-${buttonColor} waves-effect waves-light">${dapp.type}</button></td>
-                                <td>${(balance/demicals).toFixed(2)}</td>
-                                <td>${dauSet.size}</td> 
-                                <td>${dailyVolume}</td>
-                                <td>${txnCnt}</td>                                   
-                                <td>
-                                    ${guanzhu}
-                                </td>
-                            </tr>`
-                            //<td>${weeklyVolume}</td>
-                            //<td>${dailyVolume}/${weeklyVolume}</td>
-                            //<td>${(dailyBalance/demicals).toFixed(2)}/${(dailyBalance/demicals).toFixed(2)}</td>
-                            
-                            document.getElementById("dappList").insertAdjacentHTML('beforeend', newTr)
-
-                            }
                     
-                        //var demicals = 1e18;
-                        //var fixedBalance = (totalBalance/demicals).toFixed(2)
-                        
-                        //document.getElementById("totalDapp").innerText = totalDapp
-                        //document.getElementById("totalBalance").innerText = fixedBalance
-                        //document.getElementById("totalVolume").innerText = totalTrade
-                        //document.getElementById("totalDau").innerText = totalDau.size
-                        
-                        }
-                        */
-                        var demicals = 1e18;
-                        var fixedBalance = (totalBalance/demicals).toFixed(2)
-                        console.log(totalDapp)
-                        console.log(fixedBalance)
-                        document.getElementById("totalDapp").innerText = totalDapp
-                        document.getElementById("totalBalance").innerText = fixedBalance
-                        document.getElementById("totalVolume").innerText = totalTrade
-                        document.getElementById("totalDau").innerText = totalDau.size 
-
-
-
                     })
                      
                 }
