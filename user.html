@@ -45,8 +45,7 @@
                         </a>
 
                     </div>
-                    
-                    <!--
+
                     <div class="col-md-4 offset-md-2 searchInput">
                             <div class="input-group mt-2" id="loginButton">
                                 <input type="text" class="form-control" placeholder="输入账户地址，只看我的添加和关注！" id="userAddress">
@@ -55,7 +54,6 @@
                                 </span>
                             </div>
                     </div>
-                    -->
 
                     <div class="clearfix"></div>
 
@@ -71,11 +69,9 @@
                             <li class="has-submenu">
                                 <a href="index.html"><i class="mdi mdi-bank"></i>主页</a>
                             </li>
-
                             <li class="has-submenu">
-                                <a href="user.html" ><i class="mdi mdi-basket-fill"></i>个人中心</a>
+                                <a href="user.html" style="box-shadow: none"><i class="mdi mdi-basket-fill"></i>个人中心</a>
                             </li>
-
                             <li class="has-submenu">
                                     <a href="#" data-toggle="modal" data-target="#myModal4"><i class="mdi mdi-basket-fill"></i>添加应用</a>
                             </li>
@@ -86,6 +82,9 @@
 
                             <li class="has-submenu">
                                     <a href="#" data-toggle="modal" data-target="#myModal2"><i class="mdi mdi-email"></i>联系我们</a>
+                            </li>
+                            <li class="has-submenu">
+                                <a href="#" id="login" data-toggle="modal" data-target="#myModal1" style="display: none">登录</a>
                             </li>
                         </ul>
                     </div> 
@@ -236,7 +235,7 @@
                                                 <th class="border-top-0">日活</th>                                    
                                                 <th class="border-top-0">日量</th>
                                                 <th class="border-top-0">总量</th>
-                                                <th class="border-top-0">关注</th>
+                                                <th class="border-top-0">删除</th>
                                             </tr>
                                         </thead>
                                         <tbody id="dappList">
@@ -264,6 +263,39 @@
             </div>
         </footer>
         <!-- End Footer -->
+        <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>						
+                    </div>
+                        <section>
+                            <div class="modal-body modal-spa">
+                                <div class="writ">
+                                    <h4>请登录</h4>
+                                            <ul>
+                                                <li class="na-me">
+                                                    <input class="name" id="loginAddress" type="text" placeholder="请输入您的账户地址">
+                                                </li>
+                                                
+                                                <div class="clearfix"></div>
+                                            </ul>
+                                            <div class="sub-bn form-group" style="text-align: center">
+                                                <!-- <div class="col-sm-6"> -->
+                                            <button type="button" class="btn btn-primary btn-block waves-effect waves-light" onclick="userLogin();">确定</button>
+                                                <!-- </div> -->
+                                                <!-- <div class="col-sm-6">
+                                                <form>
+                                                    <button class="subbtn">取消</button>
+                                                </form>
+                                                </div> -->
+                                        </div>
+                                </div>
+                            </div>
+                        </section>
+                </div>
+            </div>
+    </div>
         <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -378,7 +410,8 @@
             //var netWork = "https://testnet.nebulas.io"
             neb.setRequest(new HttpRequest(netWork));
 
-            var login = localStorage.getItem("login");
+            //var login = localStorage.getItem("login");
+            var userAddress = localStorage.getItem("userAddress")
             var totalDapp = 0;
             var totalBalance = 0;
             var totalTrade = 0;
@@ -521,13 +554,6 @@
                         buttonColor = "danger"
                     }
                     
-                    var guanzhu;
-                    if (!login){
-                        guanzhu = `<button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="guanzhu(${dapp.id});" data-toggle="modal" data-target="#myModal3">关注</button>`
-                    } else {
-                        guanzhu = `<button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="shanchu(${dapp.id});" data-toggle="modal" data-target="#myModal3">删除</button>`
-                    }
-                    
                     var newTr = `
                     <tr>
                         
@@ -540,7 +566,7 @@
                         <td>${dailyVolume}</td>
                         <td id="txnCnt">${txnCnt}</td>                                   
                         <td>
-                            ${guanzhu}
+                            <button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="shanchu(${dapp.id});" data-toggle="modal" data-target="#myModal3">删除</button>
                         </td>
                     </tr>`
 
@@ -606,16 +632,15 @@
             function loadDapps() {
                 //localStorage.removeItem("login");
                 //localStorage.removeItem("userAddress");
-                document.getElementById("dappList").innerHTML = `<tr>
+                var address = localStorage.getItem("userAddress")
+                if (address){
+                    document.getElementById("dappList").innerHTML = `<tr>
                         <td></td>
                         <td>
                             <a href="">正在从星云链加载数据，加载请稍等。。。</a>
                         </td>
                         
                     </tr>`;
-                /*
-                if (login){
-                    var address = localStorage.getItem("userAddress")
                     document.getElementById("dappListName").innerText = "我的应用列表"
                     document.getElementById("loginButton").innerHTML = `
                         <input type="text" class="form-control" value="${address}" disabled="true">
@@ -643,94 +668,39 @@
                         console.log(err);
                     })
                 }else{
-                    */
-                    var dapps = JSON.parse(sessionStorage.getItem("publicDapps"))
-                    if (dapps){
-                        console.log("本地加载")
-                        startHttpQuery(dapps)
-                    } else {
-                        neb.api.call({
-                            chainID: chainId,
-                            from: contractAddress,
-                            to: contractAddress,
-                            value: 0,
-                            nonce: 0,
-                            gasPrice: 1000000,
-                            gasLimit: 2000000,
-                            contract: {
-                                function: "getPublic",
-                                args: JSON.stringify([]),
-                            }
-                        }).then(function (resp) {
-                            sessionStorage.setItem("publicDapps", resp.result)
-                            var result = JSON.parse(resp.result)
-                            startHttpQuery(result)
-                        }).catch(function(err) {
-                            console.log(err);
-                        })
-                    }
-                //}
-            }
-            
-            function userLogin(){
-                document.getElementById("dappList").innerHTML = `<tr>
+                    document.getElementById("dappList").innerHTML = `<tr>
                         <td></td>
                         <td>
-                            <a href="">正在从星云链加载数据，加载请稍等。。。</a>
+                            <a href="">您还没有登录。。。</a>
                         </td>
                         
                     </tr>`;
-                var address = document.getElementById("userAddress").value.trim();
+                    document.getElementById("login").click()
+                }
+            }
+            
+            function userLogin(){
+                var address = document.getElementById("loginAddress").value.trim();
+                if (!address) {
+                    address = document.getElementById("userAddress").value.trim();
+                }
                 if (address === "") {
                     alert("请填写您的账户地址！");
                 } else if (!Account.isValidAddress(address)) {
                     alert("您输入的地址无效，请检查是否输入错误！");
                 } else {
-                    neb.api.call({
-                        chainID: chainId,
-                        from: address,
-                        to: contractAddress,
-                        value: 0,
-                        nonce: 0,
-                        gasPrice: 1000000,
-                        gasLimit: 2000000,
-                        contract: {
-                            function: "getPrivate",
-                            args: JSON.stringify([]),
-                        }
-                    }).then(function (resp) {
-                        console.log(resp)
-                        if (resp.result == 0){
-                            alert("您还没有自己的应用，快去添加或者关注吧！") 
-                        } else {
-                            login = true;
-                            localStorage.setItem("login", true)
-                            localStorage.setItem("userAddress", address)
-                            var result = JSON.parse(resp.result)
-                            console.log(result)
-                            //document.getElementById("dappList").innerHTML = "";
-                            document.getElementById("dappListName").innerText = "我的应用列表"
-                            document.getElementById("loginButton").innerHTML = `
-                                <input type="text" class="form-control" value="${address}" disabled="true">
-                                <span class="input-group-append">
-                                    <button class="btn btn-primary" type="button" onclick="userLogout();">退出</button>
-                                </span>`
-                            //startHttpQuery(result)
-                            location.reload()
-                        }
-                    }).catch(function(err) {
-                        console.log(err);
-                    })
+                      localStorage.setItem("userAddress", address)
+                      location.reload();
                 }
             }
             
             function userLogout(){
-                localStorage.removeItem("login");
+                //localStorage.removeItem("login");
                 localStorage.removeItem("userAddress");
                 location.reload();
             }
             
-            function guanzhu(id){
+            /*function guanzhu(id){
                 var to = contractAddress;
                 var value = 0;
                 var callFunction = "guanzhuPrivate";
@@ -744,7 +714,7 @@
                 }
                 //发送交易(发起智能合约调用)
                 nebPay.call(to, value, callFunction, callArgs, options);
-            }
+            }*/
 
             function shanchu(id){
                 var to = contractAddress;
@@ -797,23 +767,24 @@
             }
 
             function funcIntervalQuery(txhash) {
+                console.log(txhash)
                 newWindow.innerHTML = `<h4>正在查询结果，请稍等...</h4>`
                 newWindow1.innerHTML = `<h4>正在查询结果，请稍等...</h4>`
                 receiptTransaction(txhash).then(function(resp){
                     var respObject = resp;
                     console.log(respObject)
                     if (respObject.status == 1){
+                        console.log(respObject.status)
                         clearInterval(intervalQuery);
                         newWindow.innerHTML = `<h4>执行成功!</h4>`
                         newWindow1.innerHTML = `<h4>应用添加成功!</h4>`
                         //location.reload();
                         var address = resp.from;
                         console.log(address)
-                        login = true;
-                        //localStorage.setItem("login", true)
                         localStorage.setItem("userAddress", address)
-                        setTimeout(window.location.href="user.html", 3000)
+                        setTimeout(location.reload(), 3000)
                     } else if (respObject.status == 0) {
+                        console.log(respObject.status)
                         newWindow.innerHTML = `
                         <h4>啊哦，好像哪里出错了！</h4>
                         <h4>您可以根据以下哈希，再次确认您的交易状态:</h4>
@@ -822,6 +793,7 @@
                         </div>`
                     }
                 }).catch(function(err){
+                    console.log(err)
                     newWindow.innerHTML = `
                     <h4>啊哦，好像哪里出错了！</h4>
                     <h4>您可以根据以下哈希，再次确认您的交易状态:</h4>
