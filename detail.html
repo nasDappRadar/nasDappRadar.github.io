@@ -70,7 +70,7 @@
                                 </li>
 
                                 <li class="has-submenu">
-                                    <a href="user.html" ><i class="mdi mdi-basket-fill"></i>个人中心</a>
+                                    <a href="user.html" ><i class="mdi mdi-clipboard-account"></i>个人中心</a>
                                 </li>
     
                                 <li class="has-submenu">
@@ -510,6 +510,7 @@
                     var dailyHash;
                     for (var i=0; i<txList.length; i++){
                         var tx = txList[i];
+                        console.log(tx)
                         var timeDiff = tx.timeDiff;
                         if (timeDiff <= 86400000){
                             var userCount = dauUser.size

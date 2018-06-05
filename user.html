@@ -23,7 +23,7 @@
     </head>
 
 
-    <body onload="loadDapps();">
+    <body onload="loadDapps();getUserAddress();">
 
         <!-- Loader -->
         <div id="preloader"><div id="status"><div class="spinner"></div></div></div>
@@ -70,7 +70,7 @@
                                 <a href="index.html"><i class="mdi mdi-bank"></i>主页</a>
                             </li>
                             <li class="has-submenu">
-                                <a href="user.html" style="box-shadow: none"><i class="mdi mdi-basket-fill"></i>个人中心</a>
+                                <a href="user.html" style="box-shadow: none"><i class="mdi mdi-clipboard-account"></i>个人中心</a>
                             </li>
                             <li class="has-submenu">
                                     <a href="#" data-toggle="modal" data-target="#myModal4"><i class="mdi mdi-basket-fill"></i>添加应用</a>
@@ -263,7 +263,7 @@
             </div>
         </footer>
         <!-- End Footer -->
-        <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" onload="getUserAddress();">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -699,6 +699,26 @@
                 localStorage.removeItem("userAddress");
                 location.reload();
             }
+
+            function getUserAddress() {
+                window.postMessage(
+                  {
+                    target: 'contentscript',
+                    // data: 'a',
+                    method: 'getAccount'
+                  },
+                  '*'
+                )
+                window.addEventListener('message', function(e) {
+                  if (e.data && e.data.data && e.data.data.account) {
+                    //这就是当前钱包中的地址
+                    console.log(e.data.data.account)
+                    //return e.data.data.account;
+                    document.getElementById("loginAddress").value = e.data.data.account;
+                    document.getElementById("userAddress").value = e.data.data.account;
+                  }
+                })
+              }
             
             /*function guanzhu(id){
                 var to = contractAddress;
