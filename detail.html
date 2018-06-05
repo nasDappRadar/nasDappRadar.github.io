@@ -526,6 +526,7 @@
                             var from = tx.from.hash;
                             var fromBalance = (tx.from.balance/1e18).toFixed(2);
                             var hash = tx.hash;
+                            var value = tx.value/1e18;
                             try{
                             var func = JSON.parse(tx.data).Function
                             var args = JSON.parse(tx.data).Args
@@ -540,7 +541,7 @@
                                     <div class="media-body">
                                         <p class="media-heading mb-0"><a href="https://explorer.nebulas.io/#/tx/${hash}" onHover>${hash}</a><i class="fa text-success mr-1 pull-right">时间:</i></p>
                                         <small class="pull-right text-success">${timeAgo}</small>
-                                        <small class="text-success">${func}:${args}</small>
+                                        <small class="text-success">value:${value} nas | ${func}:${args}</small>
                                     </div>
                                 </div>
                             </li>`
