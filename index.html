@@ -370,8 +370,8 @@
         <script src="assets/js/jquery.scrollTo.min.js"></script>
         <script src="assets/plugins/skycons/skycons.min.js"></script>
         <script src="assets/plugins/raphael/raphael-min.js"></script>
-        <script src="assets/plugins/morris/morris.min.js"></script>
-        <script src="assets/pages/dashborad.js"></script>
+        <!-- <script src="assets/pages/dashborad.js"></script> -->
+        <!-- <script src="assets/plugins/morris/morris.min.js"></script> -->
 
         <!-- App js -->
         <script src="assets/js/app.js"></script>
@@ -538,13 +538,6 @@
                         buttonColor = "danger"
                     }
                     
-                    var guanzhu;
-                    if (!login){
-                        guanzhu = `<button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="guanzhu(${dapp.id});" data-toggle="modal" data-target="#myModal3">关注</button>`
-                    } else {
-                        guanzhu = `<button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="shanchu(${dapp.id});" data-toggle="modal" data-target="#myModal3">删除</button>`
-                    }
-                    
                     var newTr = `
                     <tr>
                         
@@ -557,7 +550,7 @@
                         <td>${dailyVolume}</td>
                         <td id="txnCnt">${txnCnt}</td>                                   
                         <td>
-                            ${guanzhu}
+                            <button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="guanzhu(${dapp.id});" data-toggle="modal" data-target="#myModal3">关注</button>
                         </td>
                     </tr>`
 
