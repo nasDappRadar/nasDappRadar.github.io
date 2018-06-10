@@ -44,6 +44,22 @@
                             </a>
     
                         </div>
+                        <div class="menu-extras topbar-custom">
+                            <ul class="list-inline float-right mb-0">
+                                <li class="menu-item list-inline-item">
+                                    <!-- Mobile menu toggle-->
+                                    <a class="navbar-toggle nav-link">
+                                        <div class="lines">
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                        </div>
+                                    </a>
+                                    <!-- End mobile menu toggle-->
+                                </li>
+    
+                            </ul>
+                        </div>
     
                         <!-- <div class="col-md-4 offset-md-2 searchInput">
                                 <div class="input-group mt-2">
@@ -252,6 +268,18 @@
                         </div>
                     </div>               
                 </div>
+                <!--
+                <div class="row">
+                    <div class="col-md-12 col-lg-12 col-xl-8">
+                        <div class="card m-b-30">
+                            <div class="card-body">
+                                <h5 class="header-title pb-3 mt-0">Overview</h5>
+                                <div id="multi-line-chart1" style="height:400px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                -->
                     
             </div>
         </div>
@@ -567,6 +595,17 @@
                     document.getElementById("volume").innerText = dailyVolume;
                     document.getElementById("dau").innerText = dauUser.size;
                     document.getElementById("totalUser").innerText = totalUser.size;
+                    var vData = [
+                        { y: '2009', a: 0, b: 0, c: 0 },
+                        { y: '2010', a: 150,  b: 30, c: 50 },
+                        { y: '2011', a: 20,  b: 50, c: 150 },
+                        { y: '2012', a: 150,  b: 80, c: 40 },
+                        { y: '2013', a: 20,  b: 110, c: 150 },
+                        { y: '2014', a: 50,  b: 150, c: 40 },
+                        { y: '2015', a: 150, b: 170, c: 130 },
+                        { y: '2016', a: 650, b: 570, c: 430 }
+                      ]
+                    //Dashboard.prototype.init(vData);
                 })
 
             }
@@ -651,6 +690,40 @@
                 return promise
             }
 
+
+            var Dashboard = function() {};
+
+            //creates line chart
+            Dashboard.prototype.createLineChart = function(element, data, xkey, ykeys, labels, lineColors) {
+                Morris.Line({
+                element: element,
+                data: data,
+                xkey: xkey,
+                ykeys: ykeys,
+                labels: labels,
+                hideHover: 'auto',
+                gridLineColor: '#eef0f2',
+                resize: true, //defaulted to true
+                lineColors: lineColors
+                });
+            },
+
+            Dashboard.prototype.init = function(data) {
+
+                //create line chart
+                /*
+                var $data  = [
+                    { y: '2009', a: 0, b: 0, c: 0 },
+                    { y: '2010', a: 150,  b: 30, c: 50 },
+                    { y: '2011', a: 20,  b: 50, c: 150 },
+                    { y: '2012', a: 150,  b: 80, c: 40 },
+                    { y: '2013', a: 20,  b: 110, c: 150 },
+                    { y: '2014', a: 50,  b: 150, c: 40 },
+                    { y: '2015', a: 150, b: 170, c: 130 }
+                ];*/
+                this.createLineChart('multi-line-chart1', data, 'y', ['a', 'b', 'c'], ['日活', '日量', '总量C'], ['#007BFF', '#00bcd2', '#e785da']);
+
+            }
 
        </script>
 

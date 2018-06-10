@@ -45,6 +45,23 @@
                         </a>
 
                     </div>
+
+                    <div class="menu-extras topbar-custom">
+                        <ul class="list-inline float-right mb-0">
+                            <li class="menu-item list-inline-item">
+                                <!-- Mobile menu toggle-->
+                                <a class="navbar-toggle nav-link">
+                                    <div class="lines">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                    </div>
+                                </a>
+                                <!-- End mobile menu toggle-->
+                            </li>
+
+                        </ul>
+                    </div>
                     
                     <!--
                     <div class="col-md-4 offset-md-2 searchInput">
@@ -232,10 +249,10 @@
                                                 -->
                                                 <th class="border-top-0">名称</th>
                                                 <th class="border-top-0">应用类型</th>
-                                                <th class="border-top-0">余额</th>
-                                                <th class="border-top-0">日活</th>                                    
-                                                <th class="border-top-0">日量</th>
-                                                <th class="border-top-0">总量</th>
+                                                <th class="border-top-0">余额<i class="mdi mdi-arrow-down" onclick="orderByBalance();"></i></th>
+                                                <th class="border-top-0">日活<i class="mdi mdi-arrow-down" onclick="orderByDau();"></i></th>                                    
+                                                <th class="border-top-0">日量<i class="mdi mdi-arrow-down" onclick="orderByDav();"></i></th>
+                                                <th class="border-top-0">总量<i class="mdi mdi-arrow-down" onclick="orderByCount();"></i></th>
                                                 <th class="border-top-0">关注</th>
                                             </tr>
                                         </thead>
@@ -546,7 +563,11 @@
 
                     var liObj = {
                         html: newTr,
-                        txnCnt: txnCnt
+                        txnCnt: txnCnt,
+                        balance: (balance/demicals).toFixed(2),
+                        dau: dauSet.size,
+                        dav: dailyVolume,
+
                     }
                     //<td>${weeklyVolume}</td>
                     //<td>${dailyVolume}/${weeklyVolume}</td>
@@ -579,6 +600,54 @@
                     document.getElementById("totalDau").innerText = totalDau.size 
                 }
                     
+            }
+
+            function orderByBalance(){
+                liList.sort(function(li1, li2){
+                    var n1=parseInt(li1.balance);  
+                    var n2=parseInt(li2.balance);  
+                    return n2-n1;  //升序排列  
+                });
+                document.getElementById("dappList").innerHTML = ""
+                for(var i=0;i<liList.length;i++){  
+                    document.getElementById("dappList").insertAdjacentHTML('beforeend', liList[i].html);   //排序之后再写入  
+                }
+            }
+
+            function orderByDau(){
+                liList.sort(function(li1, li2){
+                    var n1=parseInt(li1.dau);  
+                    var n2=parseInt(li2.dau);  
+                    return n2-n1;  //升序排列  
+                });
+                document.getElementById("dappList").innerHTML = ""
+                for(var i=0;i<liList.length;i++){  
+                    document.getElementById("dappList").insertAdjacentHTML('beforeend', liList[i].html);   //排序之后再写入  
+                }
+            }
+
+            function orderByDav(){
+                liList.sort(function(li1, li2){
+                    var n1=parseInt(li1.dav);  
+                    var n2=parseInt(li2.dav);  
+                    return n2-n1;  //升序排列  
+                });
+                document.getElementById("dappList").innerHTML = ""
+                for(var i=0;i<liList.length;i++){  
+                    document.getElementById("dappList").insertAdjacentHTML('beforeend', liList[i].html);   //排序之后再写入  
+                }
+            }
+
+            function orderByCount() {
+                liList.sort(function(li1, li2){
+                    var n1=parseInt(li1.txnCnt);  
+                    var n2=parseInt(li2.txnCnt);  
+                    return n2-n1;  //升序排列  
+                });
+                document.getElementById("dappList").innerHTML = ""
+                for(var i=0;i<liList.length;i++){  
+                    document.getElementById("dappList").insertAdjacentHTML('beforeend', liList[i].html);   //排序之后再写入  
+                }
             }
 
             function startHttpQuery(data){     
