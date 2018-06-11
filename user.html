@@ -521,6 +521,34 @@
                 });
             };
 
+            function getDapp1(dapp){
+                return new Promise( function(resolve, reject){
+                    var taskList = new Array();
+                    var address = dapp.address
+                    var url = 'http://127.0.0.1/private'
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('post',url,true);
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;")
+                    xhr.responseType ='json';
+                    xhr.onload =  function(){
+                        var status = xhr.status;
+                        if (status == 200) {
+                            var resp = xhr.response;
+                            console.log(resp);
+                            var result = {
+                                dapp: dapp,
+                                info: resp
+                            }
+                            showLIst1(result);
+                            resolve()
+                        } else {
+                            reject()
+                        }
+                    };
+                    xhr.send();
+                });
+            };
+
             function showLIst(result) {
                 var dapp = result.dapp;
                 var txList = result.txList;
@@ -623,6 +651,76 @@
                     
             }
 
+            function showLIst1(result) {
+                var dapp = result.dapp;
+                var info = result.info;
+                totalBalance +=  parseInt(info.contractValue);
+                totalTrade += info.hashCountday;
+                totalDau += info.userCountday;
+                
+                var demicals = 1e18;
+                var buttonColor
+                if (dapp.type == '游戏') {
+                    buttonColor = "success"
+                } else if (dapp.type == '工具'){
+                    buttonColor = "warning"
+                } else {
+                    buttonColor = "danger"
+                }
+                
+                var newTr = `
+                <tr>
+                    
+                    <td>
+                        <a href="./detail.html?name=${dapp.name}&address=${dapp.address}&url=${dapp.url}">${dapp.name}</a>
+                    </td>
+                    <td> <button type="button" class="btn btn-${buttonColor} waves-effect waves-light">${dapp.type}</button></td>
+                    <td>${(info.contractValue/demicals).toFixed(2)}</td>
+                    <td>${info.userCountday}</td> 
+                    <td>${info.hashCountday}</td>
+                    <td>${info.userCountAll}</td> 
+                    <td id="txnCnt">${info.hashCountAll}</td>                                   
+                    <td>
+                        <button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="guanzhu(${dapp.id});" data-toggle="modal" data-target="#myModal3">关注</button>
+                    </td>
+                </tr>`
+                    
+                var liObj = {
+                    html: newTr,
+                    txnCnt: info.hashCountAll,
+                    userCnt: info.userCountAll,
+                    balance: (info.contractValue/demicals).toFixed(2),
+                    dau: info.userCountday,
+                    dav: info.hashCountday,
+                }
+                liList.push(liObj);
+
+                if (liList.length>1){
+                    liList.sort(function(li1, li2){
+                        var n1=parseInt(li1.txnCnt);  
+                        var n2=parseInt(li2.txnCnt);  
+                        return n2-n1;  //升序排列  
+                    });
+                    document.getElementById("dappList").innerHTML = ""
+                    for(var i=0;i<liList.length;i++){  
+                        document.getElementById("dappList").insertAdjacentHTML('beforeend', liList[i].html);   //排序之后再写入  
+                    } 
+                } else {
+                    document.getElementById("dappList").innerHTML = ""
+                    document.getElementById("dappList").insertAdjacentHTML('beforeend', newTr)
+                }
+                
+                var demicals = 1e18;
+                console.log(totalBalance)
+                var fixedBalance = (totalBalance/demicals).toFixed(2)
+                console.log(fixedBalance)
+                document.getElementById("totalDapp").innerText = result.length
+                document.getElementById("totalBalance").innerText = fixedBalance
+                document.getElementById("totalVolume").innerText = totalTrade
+                document.getElementById("totalDau").innerText = totalDau
+     
+            }
+
             function startHttpQuery(data){     
                 var queryList = new Array();
                 var nullCount = 0;
@@ -675,8 +773,7 @@
                             function: "getPrivate",
                             args: JSON.stringify([]),
                         }
-                    }).then(function (resp) {
-                        console.log(resp)
+                    }).then(function (resp) {                     
                         var result = JSON.parse(resp.result)
                         console.log(result)
                         startHttpQuery(result)
