@@ -8,7 +8,6 @@
         <meta content="Admin Dashboard" name="description" />
         <meta content="Mannatthemes" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
         <link rel="shortcut icon" href="assets/images/favicon.ico">
         <link href="assets/plugins/morris/morris.css" rel="stylesheet">
@@ -253,7 +252,6 @@
                                                 <th class="border-top-0">余额<i class="mdi mdi-arrow-down" onclick="orderByBalance();"></i></th>
                                                 <th class="border-top-0">日活<i class="mdi mdi-arrow-down" onclick="orderByDau();"></i></th>                                    
                                                 <th class="border-top-0">日量<i class="mdi mdi-arrow-down" onclick="orderByDav();"></i></th>
-                                                <th class="border-top-0">总活<i class="mdi mdi-arrow-down" onclick="orderByUC();"></i></th>
                                                 <th class="border-top-0">总量<i class="mdi mdi-arrow-down" onclick="orderByCount();"></i></th>
                                                 <th class="border-top-0">关注</th>
                                             </tr>
@@ -401,7 +399,7 @@
             var totalDapp = 0;
             var totalBalance = 0;
             var totalTrade = 0;
-            var totalDau = 0;
+            var totalDau = new Set();
             var liList = new Array();
             var sortList = new Array();
 
@@ -491,7 +489,7 @@
                 });
             };
 
-            function showLIst1(result) {
+            function showLIst(result) {
                 var dapp = result.dapp;
                 var txList = result.txList;
                 var txnCnt = result.txnCnt;
@@ -645,18 +643,6 @@
                 }
             }
 
-            function orderByUC() {
-                liList.sort(function(li1, li2){
-                    var n1=parseInt(li1.userCnt);  
-                    var n2=parseInt(li2.userCnt);  
-                    return n2-n1;  //升序排列  
-                });
-                document.getElementById("dappList").innerHTML = ""
-                for(var i=0;i<liList.length;i++){  
-                    document.getElementById("dappList").insertAdjacentHTML('beforeend', liList[i].html);   //排序之后再写入  
-                }
-            }
-
             function startHttpQuery(data){     
                 var queryList = new Array();
                 var nullCount = 0;
@@ -680,6 +666,8 @@
             };
 
             function loadDapps() {
+                //localStorage.removeItem("login");
+                //localStorage.removeItem("userAddress");
                 document.getElementById("dappList").innerHTML = `<tr>
                         <td></td>
                         <td>
@@ -687,95 +675,63 @@
                         </td>
                         
                     </tr>`;
-                
-                var url= `http://120.78.51.33:9999/public`;
-                var xhr = new XMLHttpRequest();
-                xhr.open('post',url,true);
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;")
-                xhr.responseType ='json';
-                xhr.onload =  function(){
-                    var status = xhr.status;
-                    if (status == 200) {
-                        var resp = xhr.response;
-                        console.log(resp);
-                        showLIst(resp);
+                /*
+                if (login){
+                    var address = localStorage.getItem("userAddress")
+                    document.getElementById("dappListName").innerText = "我的应用列表"
+                    document.getElementById("loginButton").innerHTML = `
+                        <input type="text" class="form-control" value="${address}" disabled="true">
+                        <span class="input-group-append">
+                            <button class="btn btn-primary" type="button" onclick="userLogout();">退出</button>
+                        </span>`
+                    neb.api.call({
+                        chainID: chainId,
+                        from: address,
+                        to: contractAddress,
+                        value: 0,
+                        nonce: 0,
+                        gasPrice: 1000000,
+                        gasLimit: 2000000,
+                        contract: {
+                            function: "getPrivate",
+                            args: JSON.stringify([]),
+                        }
+                    }).then(function (resp) {
+                        console.log(resp)
+                        var result = JSON.parse(resp.result)
+                        console.log(result)
+                        startHttpQuery(result)
+                    }).catch(function(err) {
+                        console.log(err);
+                    })
+                }else{
+                    */
+                    var dapps = JSON.parse(sessionStorage.getItem("publicDapps"))
+                    if (dapps){
+                        console.log("本地加载")
+                        startHttpQuery(dapps)
                     } else {
-                        
+                        neb.api.call({
+                            chainID: chainId,
+                            from: contractAddress,
+                            to: contractAddress,
+                            value: 0,
+                            nonce: 0,
+                            gasPrice: 1000000,
+                            gasLimit: 2000000,
+                            contract: {
+                                function: "getPublic",
+                                args: JSON.stringify([]),
+                            }
+                        }).then(function (resp) {
+                            sessionStorage.setItem("publicDapps", resp.result)
+                            var result = JSON.parse(resp.result)
+                            startHttpQuery(result)
+                        }).catch(function(err) {
+                            console.log(err);
+                        })
                     }
-                };
-                xhr.send();
-            }
-            
-            function showLIst(result) {
-                for (var i=0; i<result.length; i++){
-                    var dapp = result[i].dapp;
-                    var info = result[i].info;
-                    totalBalance +=  parseInt(info.contractValue);
-                    totalTrade += info.hashCountday;
-                    totalDau += info.userCountday;
-                    
-                    var demicals = 1e18;
-                    var buttonColor
-                    if (dapp.type == '游戏') {
-                        buttonColor = "success"
-                    } else if (dapp.type == '工具'){
-                        buttonColor = "warning"
-                    } else {
-                        buttonColor = "danger"
-                    }
-                    
-                    var newTr = `
-                    <tr>
-                        
-                        <td>
-                            <a href="./detail.html?name=${dapp.name}&address=${dapp.address}&url=${dapp.url}">${dapp.name}</a>
-                        </td>
-                        <td> <button type="button" class="btn btn-${buttonColor} waves-effect waves-light">${dapp.type}</button></td>
-                        <td>${(info.contractValue/demicals).toFixed(2)}</td>
-                        <td>${info.userCountday}</td> 
-                        <td>${info.hashCountday}</td>
-                        <td>${info.userCountAll}</td> 
-                        <td id="txnCnt">${info.hashCountAll}</td>                                   
-                        <td>
-                            <button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="guanzhu(${dapp.id});" data-toggle="modal" data-target="#myModal3">关注</button>
-                        </td>
-                    </tr>`
-                    
-                    var liObj = {
-                        html: newTr,
-                        txnCnt: info.hashCountAll,
-                        userCnt: info.userCountAll,
-                        balance: (info.contractValue/demicals).toFixed(2),
-                        dau: info.userCountday,
-                        dav: info.hashCountday,
-                    }
-                    liList.push(liObj);
-                }
-
-                if (liList.length>1){
-                    liList.sort(function(li1, li2){
-                        var n1=parseInt(li1.txnCnt);  
-                        var n2=parseInt(li2.txnCnt);  
-                        return n2-n1;  //升序排列  
-                    });
-                    document.getElementById("dappList").innerHTML = ""
-                    for(var i=0;i<liList.length;i++){  
-                        document.getElementById("dappList").insertAdjacentHTML('beforeend', liList[i].html);   //排序之后再写入  
-                    } 
-                } else {
-                    document.getElementById("dappList").innerHTML = ""
-                    document.getElementById("dappList").insertAdjacentHTML('beforeend', newTr)
-                }
-                
-                var demicals = 1e18;
-                console.log(totalBalance)
-                var fixedBalance = (totalBalance/demicals).toFixed(2)
-                console.log(fixedBalance)
-                document.getElementById("totalDapp").innerText = result.length
-                document.getElementById("totalBalance").innerText = fixedBalance
-                document.getElementById("totalVolume").innerText = totalTrade
-                document.getElementById("totalDau").innerText = totalDau
-     
+                //}
             }
             
             function userLogin(){
